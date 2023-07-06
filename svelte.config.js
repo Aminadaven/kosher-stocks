@@ -3,7 +3,7 @@
 import adapter from '@sveltejs/adapter-static';
 import data from './src/lib/data/data.json' assert { type: "json" };
 
-// const dev = process.argv.includes('dev');
+const dev = process.argv.includes('dev');
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -19,11 +19,11 @@ const config = {
         paths: {
             // base: dev ? '' : process.env.BASE_PATH,
             // base: process.env.BASE_PATH,
-            base: '/kosher-stocks'
+            base: dev ? '' : '/kosher-stocks'
         },
         prerender: {
             handleHttpError: 'warn',
-			entries: [...Object.keys(data.index).map(key => `/${key}`), '*']
+			entries: [...Object.keys(data.index).map(key => `/${key}`), '*', '/about']
 		}
 	}
 };

@@ -1,5 +1,6 @@
 <script>
 	import data from '$lib/data/data.json';
+	import { base } from '$app/paths';
 
 	export let text = '';
 	let sortColumn = null;
@@ -18,10 +19,6 @@
 	const getIskaApprovaltype = (stockRow) => {
 		const approvals = stockRow.approvals;
 		if (!approvals || approvals.length == 0) return 'לא נמצא היתר עסקה לחברה';
-		// for (const approval of approvals) {
-		// 	if (approval['סוג היתר עסקה'] === 'פרטי')
-		// 		return 'פרטי';
-		// }
 		return approvals.find(approval => approval['סוג היתר עסקה'] === 'פרטי') ? 'פרטי' : 'כללי';
 	};
 	$: {
@@ -107,7 +104,7 @@
 			{#each stockRows as stockRow}
 				<tr>
 					<td>
-						<a href="/{stockRow.stock.CorporateNo}">
+						<a href="{base}/{stockRow.stock.CorporateNo}">
 							{stockRow.stock.NameHeb}
 						</a>
 					</td>
