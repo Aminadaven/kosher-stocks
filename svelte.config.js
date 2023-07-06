@@ -19,7 +19,10 @@ const config = {
             // base: dev ? '' : process.env.BASE_PATH,
             // base: process.env.BASE_PATH,
             base: '/kosher-stocks'
-        }
+        },
+        prerender: {
+            handleHttpError: 'warn'
+		}
 	}
 };
 
