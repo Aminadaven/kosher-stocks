@@ -1,6 +1,7 @@
 // import { vitePreprocess } from '@sveltejs/kit/vite';
 // import adapter from '@sveltejs/adapter-auto';
 import adapter from '@sveltejs/adapter-static';
+import data from './src/lib/data/data.json' assert { type: "json" };
 
 // const dev = process.argv.includes('dev');
 
@@ -21,7 +22,8 @@ const config = {
             base: '/kosher-stocks'
         },
         prerender: {
-            handleHttpError: 'warn'
+            handleHttpError: 'warn',
+			entries: [...Object.keys(data.index).map(key => `/${key}`), '*']
 		}
 	}
 };

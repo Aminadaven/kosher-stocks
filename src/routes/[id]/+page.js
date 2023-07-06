@@ -1,6 +1,7 @@
-import data from '$lib/data/data.json';
+// import data from '$lib/data/data.json';
 
-export const entries = Object.keys(data.index).map((key) => ({ id: key }));
+// export const prerender = 'auto';
+// export const entries = (() => Object.keys(data.index).map((key) => ({ id: key })));
 
 // export const entries = (() => {
 //     return [

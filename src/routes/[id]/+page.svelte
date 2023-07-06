@@ -1,9 +1,11 @@
 <script>
-	import data from '$lib/data/data.json';
+	import dataJson from '$lib/data/data.json';
 	import { page } from '$app/stores';
 
+	// export let data;
+	// const id = data.id;
 	const id = $page.params.id;
-	const stockRow = data.data[data.index[id]].stock;
+	const stockRow = dataJson.data[dataJson.index[id]].stock;
 </script>
 <svelte:head>
 	<title>מידע על כשרות ההשקעה במניות ישראליות, ריבית ושבת | דף חברה {id}</title>
