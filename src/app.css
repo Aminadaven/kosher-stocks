@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.normal {
+    @apply bg-slate-50 text-sky-800;
+}
+.title {
+    @apply bg-slate-50 text-blue-800 font-bold;
+}
+.table-title {
+    @apply bg-zinc-50 text-sky-800;
+}
+
+/* Style for Webkit-based browsers (e.g., Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #FAFAFA; /* Set the background color of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #0284C7; /* Set the color of the scrollbar thumb */
+    border-radius: 4px; /* Add rounded corners to the scrollbar thumb */
+}
+
+/* Style for Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color:  #0284C7 #FAFAFA;
+}

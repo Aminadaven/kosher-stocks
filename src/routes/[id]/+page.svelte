@@ -11,9 +11,9 @@
 
 <Meta title={meta} desc={meta} />
 
-<h1 class="py-7 text-3xl font-bold text-sky-600">דף חברה {id}</h1>
-<Accordion header="finance">
-	{#each Object.keys(stockRow.stock) as stockProperty}
+<h1 class="py-7 text-3xl title">דף חברה {id}</h1>
+<Accordion header="מידע כללי">
+	{#each Object.keys(stockRow.stock).filter(name => !name.endsWith("Eng")) as stockProperty}
 		<span>
 			{stockProperty}:
 			{typeof stockRow.stock[stockProperty] === 'string'

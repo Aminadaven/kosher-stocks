@@ -67,19 +67,19 @@
 
 <Meta title={meta} desc={meta} />
 
-<h1 class="pb-7 pt-2 text-3xl font-bold text-sky-600">
+<h1 class="pb-7 pt-2 text-3xl title">
 	מידע על כשרות ההשקעה במניות ישראליות, ריבית ושבת
 </h1>
 <input
 	type="text"
 	bind:value={text}
-	class="w-full border-double border-2 border-cyan-400 rounded-lg text-center"
+	class="w-full border-double border-2 rounded-lg text-center normal"
 	placeholder="הזן שם או סמל מניה בעברית או באנגלית כדי לסנן את התוצאות"
 />
-<div class="max-h-[600px] overflow-y-auto">
+<div class="max-h-[500px] overflow-y-auto">
 	<table class="w-full rounded-lg border-2">
 		<!-- <table class="w-full table-fixed"> -->
-		<thead class="sticky top-0 bg-slate-400 rounded-lg border-2">
+		<thead class="sticky top-0 rounded-lg border-2 table-title">
 			<tr>
 				<th><button on:click={() => handleHeaderClick('NameHeb')}> שם חברה </button></th>
 				<th><button on:click={() => handleHeaderClick('SymbolEng')}> סמל </button></th>
