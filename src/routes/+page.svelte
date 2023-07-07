@@ -1,6 +1,8 @@
 <script>
 	import data from '$lib/data/data.json';
 	import { base } from '$app/paths';
+	import viewport from '../actions/useViewportAction';
+	import Meta from '../components/meta.svelte';
 
 	export let text = '';
 	let sortColumn = null;
@@ -19,7 +21,7 @@
 	const getIskaApprovaltype = (stockRow) => {
 		const approvals = stockRow.approvals;
 		if (!approvals || approvals.length == 0) return 'לא נמצא היתר עסקה לחברה';
-		return approvals.find(approval => approval['סוג היתר עסקה'] === 'פרטי') ? 'פרטי' : 'כללי';
+		return approvals.find((approval) => approval['סוג היתר עסקה'] === 'פרטי') ? 'פרטי' : 'כללי';
 	};
 	$: {
 		if (!data.data) stockRows = [];
@@ -57,19 +59,21 @@
 			sortDirection = 0;
 		}
 	};
+
+	const pageSize = 50;
+	let position = pageSize;
+	const meta = 'מידע על כשרות ההשקעה במניות ישראליות, ריבית ושבת';
 </script>
 
-<svelte:head>
-	<title>מידע על כשרות ההשקעה במניות ישראליות, ריבית ושבת</title>
-</svelte:head>
+<Meta title={meta} desc={meta} />
 
-<h1 class="py-7 text-3xl font-bold text-sky-600">
+<h1 class="pb-7 pt-2 text-3xl font-bold text-sky-600">
 	מידע על כשרות ההשקעה במניות ישראליות, ריבית ושבת
 </h1>
 <input
 	type="text"
 	bind:value={text}
-	class="w-full border-double border-2 border-cyan-400 rounded-lg text-right"
+	class="w-full border-double border-2 border-cyan-400 rounded-lg text-center"
 	placeholder="הזן שם או סמל מניה בעברית או באנגלית כדי לסנן את התוצאות"
 />
 <div class="max-h-[600px] overflow-y-auto">
@@ -78,30 +82,17 @@
 		<thead class="sticky top-0 bg-slate-400 rounded-lg border-2">
 			<tr>
 				<th><button on:click={() => handleHeaderClick('NameHeb')}> שם חברה </button></th>
-				<th
-					><button on:click={() => handleHeaderClick('SymbolEng')}>
-						סמל
-					</button></th
-				>
-				<th
-					><button on:click={() => handleHeaderClick('CorporateNo')}>
-						ח.פ.
-					</button></th
-				>
-				<th
-					><button on:click={() => handleHeaderClick('permits')}>
-						סך עובדים בשבת
-					</button></th
-				>
-				<th
-					><button on:click={() => handleHeaderClick('approval')}>
-						היתר עסקה
-					</button></th
-				>
+				<th><button on:click={() => handleHeaderClick('SymbolEng')}> סמל </button></th>
+				<th><button on:click={() => handleHeaderClick('CorporateNo')}> ח.פ. </button></th>
+				<th><button on:click={() => handleHeaderClick('permits')}> סך עובדים בשבת </button></th>
+				<th><button on:click={() => handleHeaderClick('approval')}> היתר עסקה </button></th>
 			</tr>
 		</thead>
 		<tbody>
-			{#each stockRows as stockRow}
+			{#each stockRows.slice(0, position) as stockRow, index}
+				{#if index === position - pageSize / 2}
+					<tr use:viewport on:enterViewport={() => (position += pageSize)} />
+				{/if}
 				<tr>
 					<td>
 						<a href="{base}/{stockRow.stock.CorporateNo}">
