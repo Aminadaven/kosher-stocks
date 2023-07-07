@@ -73,13 +73,13 @@
 <input
 	type="text"
 	bind:value={text}
-	class="w-full border-double border-2 rounded-lg text-center normal"
+	class="w-full custom-border text-center normal"
 	placeholder="הזן שם או סמל מניה בעברית או באנגלית כדי לסנן את התוצאות"
 />
-<div class="max-h-[500px] overflow-y-auto">
-	<table class="w-full rounded-lg border-2">
+<div class="max-h-[500px] overflow-y-auto custom-border">
+	<table class="w-full">
 		<!-- <table class="w-full table-fixed"> -->
-		<thead class="sticky top-0 rounded-lg border-2 table-title">
+		<thead class="sticky top-0 table-title">
 			<tr>
 				<th><button on:click={() => handleHeaderClick('NameHeb')}> שם חברה </button></th>
 				<th><button on:click={() => handleHeaderClick('SymbolEng')}> סמל </button></th>

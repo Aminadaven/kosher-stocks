@@ -5,11 +5,17 @@
 .normal {
     @apply bg-slate-50 text-sky-800;
 }
+
 .title {
     @apply bg-slate-50 text-blue-800 font-bold;
 }
+
 .table-title {
     @apply bg-zinc-50 text-sky-800;
+}
+
+.custom-border {
+    @apply border-zinc-300 active:border-zinc-600 rounded-lg border-2;
 }
 
 /* Style for Webkit-based browsers (e.g., Chrome, Safari) */
