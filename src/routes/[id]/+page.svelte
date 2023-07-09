@@ -11,39 +11,43 @@
 
 <Meta title={meta} desc={meta} />
 
-<h1 class="py-7 text-3xl title">דף חברה {id}</h1>
-<Accordion header="מידע כללי">
-	{#each Object.keys(stockRow.stock).filter(name => !name.endsWith("Eng")) as stockProperty}
-		<span>
-			{stockProperty}:
-			{typeof stockRow.stock[stockProperty] === 'string'
-				? stockRow.stock[stockProperty]
-				: JSON.stringify(stockRow.stock[stockProperty])}
-		</span>
+<h1 class="my-5 p-2 text-4xl style4 inline-block">דף חברה {stockRow.stock.NameHeb}</h1>
+<div class="w-fit mx-auto style3">
+<!-- <Accordion header="מידע כללי"> -->
+	<h3>מידע כללי</h3>
+	<p>
+		סמל מניה: <strong>{stockRow.stock['SymbolHeb']}</strong> | <strong>{stockRow.stock['SymbolEng']}</strong>
 		<br />
-	{/each}</Accordion
->
+		מספר חברה (ח.פ.): {stockRow.stock['CorporateNo']}
+		<br />
+		סקטור-על: {stockRow.stock['SuperSectorHeb']} סקטור: {stockRow.stock['SectorHeb']} תת-סקטור: {stockRow.stock['SubSectorHeb']}
+		<br />
+		מדדים: {stockRow.stock['IndicesListHeb']?.map(index => index.Name)?.join(', ') ?? "החברה לא נכללת באף מדד"}
+	</p>
+	<br />
+<!-- </Accordion> -->
 {#if stockRow.permits}
-	<Accordion header="היתרי העסקה בשבת">
+	<!-- <Accordion header="היתרי העסקה בשבת"> -->
 		{#each stockRow.permits as permit}
-			{#each Object.keys(permit) as stockProperty}
-				<span>
-					{stockProperty}: {permit[stockProperty]}
-				</span>
-				<br />
-			{/each}
+		<h3>היתר העסקה בשבת</h3>
+		<p>
+			תקופה: {permit['D_HETER_THILA']} - {permit['D_HETER_SIYUM']} | 
+			עילה: {permit['ILA_TEUR']} {permit['TAT_ILA']} | 
+			עובדים: {permit['SACH_HAKOL_OVDIM']} כוננים: {permit['SACH_HAKOL_KONANIM']}
+		</p>
+		<br />
 		{/each}
-	</Accordion>
+	<!-- </Accordion> -->
 {/if}
 {#if stockRow.approvals}
-	<Accordion header="היתר עסקה">
+	<!-- <Accordion header="היתרי עסקה"> -->
 		{#each stockRow.approvals as approval}
-			{#each Object.keys(approval) as stockProperty}
-				<span>
-					{stockProperty}: {approval[stockProperty]}
-				</span>
-				<br />
-			{/each}
+		<h3>היתר עסקה {approval['סוג היתר עסקה']}</h3>
+		<span>
+			פירוט: {approval['אג"ח וני"ע']}
+		</span>
+		<br />
 		{/each}
-	</Accordion>
+	<!-- </Accordion> -->
 {/if}
+</div>

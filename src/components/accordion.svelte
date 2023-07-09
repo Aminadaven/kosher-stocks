@@ -4,10 +4,11 @@
     const clicked = () => show = !show;
 </script>
 
-<h2 class="pt-5 text-xl title">
-    <button on:click={clicked}>
-    {header}</button>
+<div on:click={clicked} on:keydown={clicked} role="presentation" class="mt-4 py-2 bg-slate-100 rounded-[4rem]">
+<h2 class="text-xl text-blue-800 font-bold">
+    {header}
 </h2>
-<div on:click={clicked} on:keydown={clicked} role="presentation" style:display={show ? '' : 'none'}>
+    <div style:display={show ? '' : 'none'} >
     <slot />
+    </div>
 </div>
