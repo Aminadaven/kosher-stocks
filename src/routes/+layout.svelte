@@ -21,20 +21,22 @@
 	onMount(fetchData);
 </script>
 
-<div class="text-center pb-[50px] px-[15%]">
-	<nav class="pt-5 sticky top-0 style2">
-		{#each Object.keys(routes) as route}
-			<a href="{base}{routes[route]}" class="px-5"> {route}</a>
-		{/each}
-	</nav>
+<nav class="navbar bg-base-300 justify-center top-0">
+	{#each Object.keys(routes) as route}
+		<a href="{base}{routes[route]}" class="px-5 text-xl link link-hover"> {route}</a>
+	{/each}
+</nav>
+<div class="text-center pb-12 px-0 sm:px-16 2xl:px-72">
 	<slot />
 </div>
-<footer class="footer sticky bottom-3 p-3 bg-neutral text-neutral-content">
+<footer class="hidden md:grid items-center footer justify-center bottom-0 p-3 bg-neutral text-neutral-content join">
+	{indicesData[0]?.TradeDate}
+	{indicesData[0]?.TradeTime}
+	<div class="divider md:divider-horizontal" />
 	{#each indicesData as indexData}
 		{indexData.IndexName}
-		<span class={indexData.IsAdditional ? 'text-success' : 'text-error'}>
-			{indexData.LastRate} {indexData.Change}%</span
+		<span class={'join-item' + (indexData?.Change >= 0 ? 'text-success-content' : 'text-error')}>
+			{indexData.LastRate} {indexData?.Change ?? 0}%</span
 		>
-		<div class="divider lg:divider-horizontal" />
 	{/each}
 </footer>

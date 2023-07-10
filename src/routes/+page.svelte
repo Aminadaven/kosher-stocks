@@ -3,6 +3,7 @@
 	import { base } from '$app/paths';
 	import viewport from '../actions/useViewportAction';
 	import Meta from '../components/meta.svelte';
+	import ToggleFilter from '../components/toggle-filter.svelte';
 
 	export let text = '';
 	let permitDisallowed = false,
@@ -29,9 +30,6 @@
 	};
 	$: {
 		if (!data.data) stockRows = [];
-		// else if (!text) {
-		// 	stockRows = Object.values(data.data);
-		// }
 		else {
 			const keysToCheck = [
 				'NameHeb',
@@ -52,7 +50,8 @@
 			const approvalFilter = (stockRow) => {
 				if (!approvalRequired) return true;
 				const appprovaltype = getIskaApprovaltype(stockRow);
-				return ['פרטי', 'כללי'].includes(appprovaltype); // appprovaltype !== 'לא נמצא היתר עסקה לחברה';
+				// return ['פרטי', 'כללי'].includes(appprovaltype);
+				return appprovaltype !== 'לא נמצא היתר עסקה לחברה';
 			};
 			const allFilters = (stockRow) =>
 				searchFilter(stockRow) && permitFilter(stockRow) && approvalFilter(stockRow);
@@ -100,32 +99,25 @@
 <Meta title={meta} desc={meta} />
 
 <h1 class="pb-7 pt-2 text-4xl font-bold text-neutral-content">פילטר מניות כשרות</h1>
-<!-- <div class="w-full flex flex-row"> -->
 <span class="flex flex-row justify-between">
 	<input
 		type="text"
 		bind:value={text}
-		class="w-[50%] text-center bg-transparent"
+		class="w-[50%] input input-bordered text-center bg-transparent"
 		placeholder="הזן שם או סמל מניה בעברית או באנגלית כדי לסנן את התוצאות"
 	/>
-	<input
-		type="checkbox"
-		id="permitFilter"
+	<ToggleFilter
+		label="רק חברות שלא מעסיקות בשבת"
 		on:change={() => (permitDisallowed = !permitDisallowed)}
 	/>
-	<label class="mx-1" for="permitFilter">רק חברות שלא מעסיקות בשבת</label>
-	<input
-		type="checkbox"
-		id="approvalFilter"
+	<ToggleFilter
+		label="רק חברות עם היתר עסקה"
 		on:change={() => (approvalRequired = !approvalRequired)}
 	/>
-	<label class="mx-1" for="approvalFilter">רק חברות עם היתר עסקה</label>
 </span>
-<!-- </div> -->
-<div class="max-h-[500px] overflow-y-auto">
-	<table class="w-full">
-		<!-- <table class="w-full table-fixed"> -->
-		<thead class="sticky top-0 bg-base-300">
+<div class="max-h-screen overflow-auto">
+	<table class="table table-fixed table-xs sm:table-sm md:table-md lg:table-lg table-pin-rows text-center static">
+			<thead>
 			<tr>
 				<th><button on:click={() => handleHeaderClick('NameHeb')}> שם חברה </button></th>
 				<th><button on:click={() => handleHeaderClick('SymbolEng')}> סמל </button></th>
@@ -139,16 +131,12 @@
 				{#if index === position - pageSize / 2}
 					<tr use:viewport on:enterViewport={() => (position += pageSize)} />
 				{/if}
-				<tr>
-					<td>
-						<a href="{base}/{stockRow.stock.CorporateNo}">
-							{stockRow.stock.NameHeb}
-						</a>
-					</td>
-					<td>{stockRow.stock.SymbolEng}</td>
-					<td>{stockRow.stock.SectorHeb}</td>
-					<td>{getShabbatWorkersSum(stockRow)}</td>
-					<td>{getIskaApprovaltype(stockRow)}</td>
+				<tr class="hover">
+						<td><a href="{base}/{stockRow.stock.CorporateNo}">{stockRow.stock.NameHeb}</a></td>
+						<td>{stockRow.stock.SymbolEng}</td>
+						<td>{stockRow.stock.SectorHeb}</td>
+						<td>{getShabbatWorkersSum(stockRow)}</td>
+						<td>{getIskaApprovaltype(stockRow)}</td>
 				</tr>
 			{/each}
 		</tbody>
