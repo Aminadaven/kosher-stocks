@@ -26,16 +26,16 @@
 		<a href="{base}{routes[route]}" class="px-5 text-xl link link-hover"> {route}</a>
 	{/each}
 </nav>
-<div class="text-center pb-12 px-0 sm:px-16 2xl:px-72">
+<div class="text-center pb-12 px-0 sm:px-12 md:px-16 lg:px-20 xl:px-24 2xl:px-32">
 	<slot />
 </div>
-<footer class="hidden md:grid items-center footer justify-center bottom-0 p-3 bg-neutral text-neutral-content join">
+<footer class="hidden md:grid items-center footer justify-center bottom-0 p-3 bg-neutral-content text-neutral join">
 	{indicesData[0]?.TradeDate}
 	{indicesData[0]?.TradeTime}
 	<div class="divider md:divider-horizontal" />
 	{#each indicesData as indexData}
 		{indexData.IndexName}
-		<span class={'join-item' + (indexData?.Change >= 0 ? 'text-success-content' : 'text-error')}>
+		<span class={'join-item' + (indexData?.Change >= 0 ? 'text-success' : 'text-error')}>
 			{indexData.LastRate} {indexData?.Change ?? 0}%</span
 		>
 	{/each}

@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: "lulav";
+  src: url("../LulavCLM-Bold.otf");
+}
 
 
 /* Style for Webkit-based browsers (e.g., Chrome, Safari) */

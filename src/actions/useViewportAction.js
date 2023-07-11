@@ -3,7 +3,7 @@ let intersectionObserver;
 function ensureIntersectionObserver() {
 	if (intersectionObserver) return;
 
-  intersectionObserver = new IntersectionObserver(
+	intersectionObserver = new IntersectionObserver(
 		(entries) => {
 			entries.forEach(entry => {
 				const eventName = entry.isIntersecting ? 'enterViewport' : 'exitViewport';
@@ -22,5 +22,5 @@ export default function viewport(element) {
 		destroy() {
 			intersectionObserver.unobserve(element);
 		}
-	}
+	};
 }
