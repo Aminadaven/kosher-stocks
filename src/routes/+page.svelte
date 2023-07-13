@@ -19,17 +19,17 @@
 		if (!shabbatPermits || shabbatPermits.length == 0) return 'אין לחברה היתר העסקת עובדים בשבת';
 		let shabbatWorkersSum = 0;
 		for (const permit of shabbatPermits) {
-			shabbatWorkersSum += Number(permit?.SACH_HAKOL_OVDIM);
-			shabbatWorkersSum += Number(permit?.SACH_HAKOL_KONANIM);
+			shabbatWorkersSum += Number(permit?.employeesSum);
+			shabbatWorkersSum += Number(permit?.onCallEmployeesSum);
 		}
 		return shabbatWorkersSum;
 	};
 	const getIskaApprovaltype = (stockRow) => {
 		const approvals = stockRow.approvals;
 		if (!approvals || approvals.length == 0) return 'לא נמצא היתר עסקה לחברה';
-		if (approvals.every((approval) => approval['אג"ח וני"ע'] === 'יש אג"ח - לא מאושר'))
+		if (approvals.every((approval) => approval.details === 'יש אג"ח - לא מאושר'))
 			return 'היתר עסקה לא מאושר';
-		return approvals.find((approval) => approval['סוג היתר עסקה'] === 'פרטי') ? 'פרטי' : 'כללי';
+		return approvals.find((approval) => approval.type === 'פרטי') ? 'פרטי' : 'כללי';
 	};
 	$: {
 		// if (!data.data) stockRows = [];
@@ -109,7 +109,7 @@
 <Meta title={meta} desc={meta} />
 
 <h1 class="pb-7 pt-2 text-4xl font-bold text-neutral-content">פילטר מניות כשרות</h1>
-<span class="flex flex-row justify-between flex-wrap">
+<span class="flex flex-row justify-between flex-wrap md:flex-nowrap">
 	<input
 		type="text"
 		bind:value={text}
@@ -132,7 +132,7 @@
 		on:change={() => (approvalRequired = !approvalRequired)}
 	/>
 </span>
-<div class="max-h-[500px] overflow-auto">
+<div class="max-h-[520px] overflow-auto">
 	<table class="table table-fixed table-xs sm:table-sm md:table-md lg:table-lg table-pin-rows text-center static">
 		<thead>
 			<tr>

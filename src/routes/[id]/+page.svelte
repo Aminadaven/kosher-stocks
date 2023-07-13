@@ -21,8 +21,8 @@
 		מספר חברה (ח.פ.): {stockRow.stock['CorporateNo']}
 		<br />
 		סקטור-על: {stockRow.stock['SuperSectorHeb']} סקטור: {stockRow.stock['SectorHeb']} תת-סקטור: {stockRow.stock['SubSectorHeb']}
-		<br />
-		מדדים: {stockRow.stock['IndicesListHeb']?.map(index => index.Name)?.join(', ') ?? "החברה לא נכללת באף מדד"}
+		<!-- <br />
+		מדדים: {stockRow.stock['IndicesListHeb']?.map(index => index.Name)?.join(', ') ?? "החברה לא נכללת באף מדד"} -->
 	</p>
 	<br />
 <!-- </Accordion> -->
@@ -31,9 +31,9 @@
 		{#each stockRow.permits as permit}
 		<h3>היתר העסקה בשבת</h3>
 		<p>
-			תקופה: {permit['D_HETER_THILA']} - {permit['D_HETER_SIYUM']} | 
-			עילה: {permit['ILA_TEUR']} {permit['TAT_ILA']} | 
-			עובדים: {permit['SACH_HAKOL_OVDIM']} כוננים: {permit['SACH_HAKOL_KONANIM']}
+			תקופה: {permit.startDate} - {permit.endDate} | 
+			עילה: {permit.cause} {permit.subCause} | 
+			עובדים: {permit.employeesSum} כוננים: {permit.onCallEmployeesSum}
 		</p>
 		<br />
 		{/each}
@@ -42,9 +42,12 @@
 {#if stockRow.approvals}
 	<!-- <Accordion header="היתרי עסקה"> -->
 		{#each stockRow.approvals as approval}
-		<h3>היתר עסקה {approval['סוג היתר עסקה']}</h3>
+		<h3>היתר עסקה {approval.type}</h3>
 		<span>
-			פירוט: {approval['אג"ח וני"ע']}
+			פירוט: {approval.details}
+		</span>
+		<span>
+			הערות: {approval.comments ?? 'אין'}
 		</span>
 		<br />
 		{/each}
