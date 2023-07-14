@@ -29,7 +29,7 @@
 	{#if stockRow.companyDetails}
 		<Collapse header="פרטי חברה">
 			<p>
-				{JSON.stringify(stockRow.companyDetails)}
+				{JSON.stringify(stockRow.companyDetails, null, 4)}
 			</p>
 		</Collapse>
 		<br />
@@ -37,16 +37,40 @@
 	{#if stockRow.shareHolders}
 		<Collapse header="מחזיקי מניה">
 			<p>
-				{JSON.stringify(stockRow.shareHolders)}
+				{JSON.stringify(stockRow.shareHolders, null, 4)}
 			</p></Collapse
 		>
 		<br />
 	{/if}
 	{#if stockRow.financeData}
 		<Collapse header="מידע פיננסי">
-			<p>
+			<!-- <p>
 				{JSON.stringify(stockRow.financeData, null, 4)}
-			</p>
+			</p> -->
+				
+<div class="overflow-y-auto">
+	<h4 class="">{stockRow.financeData.CurrencyName}</h4>
+	<table class="table table-fixed table-xs sm:table-sm md:table-md lg:table-lg table-pin-rows table-pin-cols text-center static">
+		<thead>
+			<tr>
+				<th>שם</th>
+				<th>{stockRow.financeData.CurrentPeriod.Title} {stockRow.financeData.CurrentPeriod.IFRS}</th>
+				<th>{stockRow.financeData.PreviousPeriod.Title} {stockRow.financeData.PreviousPeriod.IFRS}</th>
+				<th>{stockRow.financeData.PreviousYear.Title} {stockRow.financeData.PreviousYear.IFRS}</th>
+			</tr>
+		</thead>
+		<tbody class="bg-info">
+			{#each stockRow.financeData.AllRows ?? [] as row, index}
+				<tr class="hover">
+					<td>{row.Name}</td>
+					<td>{row.CurrPeriodValue}</td>
+					<td>{row.PrevPeriodValue}</td>
+					<td>{row.PrevYearValue}</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 		</Collapse>
 		<br />
 	{/if}

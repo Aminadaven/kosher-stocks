@@ -114,8 +114,9 @@
 		type="text"
 		bind:value={text}
 		class="w-min md:w-[35%] input input-bordered text-center bg-transparent"
-		placeholder="הזן שם או סמל מניה בעברית או באנגלית כדי לסנן את התוצאות"
+		placeholder="חיפוש"
 	/>
+	סקטור: 
 	<select bind:value={sector} class="select select-bordered mr-2 pl-10 pr-4 max-w-xs w-min 2xl:max-w-none 2xl:w-[35%]">
 		{#each sectors as sector}
 			<option value={sector}>{sector}</option>
