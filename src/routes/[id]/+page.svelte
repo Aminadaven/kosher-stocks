@@ -11,17 +11,17 @@
 
 <Meta title={meta} desc={meta} />
 
-<h1 class="my-5 p-2 text-4xl style4 inline-block">דף חברה {stockRow.stock.NameHeb}</h1>
+<h1 class="my-5 p-2 text-4xl style4 inline-block">{stockRow.companyDetails.CompanyLongName}</h1>
 <div class="mx-auto">
 	<Collapse header="מידע כללי">
 		<p>
-			סמל מניה: <strong>{stockRow.stock['SymbolHeb']}</strong> |
-			<strong>{stockRow.stock['SymbolEng']}</strong>
+			סמל מניה: <strong>{stockRow.stock.SymbolHeb}</strong> |
+			<strong>{stockRow.stock.SymbolEng}</strong>
 			<br />
-			מספר חברה (ח.פ.): {stockRow.stock['CorporateNo']}
+			מספר חברה (ח.פ.): {stockRow.stock.CorporateNo}
 			<br />
-			סקטור-על: {stockRow.stock['SuperSectorHeb']} סקטור: {stockRow.stock['SectorHeb']} תת-סקטור: {stockRow
-				.stock['SubSectorHeb']}
+			סקטור-על: {stockRow.stock.SuperSectorHeb} סקטור: {stockRow.stock.SectorHeb} תת-סקטור: {stockRow
+				.stock.SubSectorHeb}
 		</p>
 	</Collapse>
 	<br />
@@ -46,14 +46,14 @@
 		<Collapse header="מידע פיננסי">
 			<p>
 				{JSON.stringify(stockRow.financeData, null, 4)}
-			</p></Collapse
-		>
+			</p>
+		</Collapse>
 		<br />
 	{/if}
 	{#if stockRow.reports}
 		<Collapse header="דיווחים">
 			<p>
-				{JSON.stringify(stockRow.reports)}
+				{JSON.stringify(stockRow.reports, null, 4)}
 			</p></Collapse
 		>
 		<br />
@@ -61,9 +61,9 @@
 	{#if stockRow.tradeData}
 		<Collapse header="מידע מסחר">
 			<p>
-				{JSON.stringify(stockRow.tradeData)}
-			</p></Collapse
-		>
+				{JSON.stringify(stockRow.tradeData, null, 4)}
+			</p>
+			</Collapse>
 		<br />
 	{/if}
 	{#if stockRow.permits}
