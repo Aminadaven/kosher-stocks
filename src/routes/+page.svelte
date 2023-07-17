@@ -4,12 +4,23 @@
 	import viewport from '../actions/useViewportAction';
 	import Meta from '../components/meta.svelte';
 	import ToggleFilter from '../components/toggle-filter.svelte';
+	import alasql from 'alasql';
 
 	let text = '';
 	let permitDisallowed = false,
 		approvalRequired = false;
 	let sortColumn = null;
 	let sortDirection = 0; // 0 for unordered, -1 for ascending, 1 for descending
+
+	// Handle header click event
+	const handleHeaderClick = (column) => {
+		sortColumn = column;
+		sortDirection++;
+		if (sortDirection >= 2) sortDirection = -1;
+	};
+
+	const pageSize = 50;
+	let position = pageSize;
 	let sectors = [...new Set(data.data.map((row) => row.stock.SectorHeb))].sort();
 	sectors.unshift('הכל');
 	let sector;
@@ -31,9 +42,13 @@
 			return 'היתר עסקה לא מאושר';
 		return approvals.find((approval) => approval.type === 'פרטי') ? 'פרטי' : 'כללי';
 	};
+
 	$: {
-		// if (!data.data) stockRows = [];
-		// else {
+		// if (text.startsWith('SQL: ')) {
+		// 	// console.log(alasql('select * from ?', [data.data]));
+		// 	stockRows = alasql(`select * from ? where ${text.substring(5)}`, [data.data]);
+		// 	break $;
+		// }
 		const keysToCheck = [
 			'NameHeb',
 			'NameEng',
@@ -63,47 +78,39 @@
 			approvalFilter(stockRow) &&
 			sectorFilter(stockRow);
 		stockRows = Object.values(data.data).filter(allFilters);
-		// }
+
+		if (!sortColumn) break $;
 		// Apply filtering and sorting when sortColumn changes
-		if (sortColumn && sortDirection !== 0) {
-			if (sortColumn === 'permits') {
-				stockRows = [...stockRows].sort((a, b) => {
-					if (sortDirection === 0) return 0;
-					if (a === b) return 0;
-					if (a === 'אין לחברה היתר העסקת עובדים בשבת') return -1 * sortDirection;
-					if (b === 'אין לחברה היתר העסקת עובדים בשבת') return 1 * sortDirection;
-					return (getShabbatWorkersSum(a) - getShabbatWorkersSum(b)) * sortDirection;
-				});
-			} else if (sortColumn === 'approval') {
-				stockRows = sortDirection === 1 ? [...stockRows].sort() : [...stockRows].sort().reverse();
-			} else {
-				stockRows = [...stockRows].sort(
-					(a, b) => (a.stock[sortColumn] > b.stock[sortColumn] ? 1 : -1) * sortDirection
-				);
-			}
+		if (sortColumn === 'permits') {
+			stockRows = stockRows.sort((a, b) => {
+				if (sortDirection === 0) return 0;
+				const aSum = getShabbatWorkersSum(a);
+				const bSum = getShabbatWorkersSum(b);
+				if (aSum === bSum) return 0;
+				if (aSum === 'אין לחברה היתר העסקת עובדים בשבת') return -1 * sortDirection;
+				if (bSum === 'אין לחברה היתר העסקת עובדים בשבת') return 1 * sortDirection;
+				return (aSum > bSum ? 1 : -1) * sortDirection;
+			});
+		} else if (sortColumn === 'approval') {
+			stockRows = stockRows.sort((a, b) => {
+				if (sortDirection === 0) return 0;
+				const aSum = getIskaApprovaltype(a);
+				const bSum = getIskaApprovaltype(b);
+				if (aSum === bSum) return 0;
+				return (aSum > bSum ? 1 : -1) * sortDirection;
+			});
+		} else if (sortColumn === 'MarketValue') {
+			stockRows = stockRows.sort(
+				(a, b) => (a.companyDetails.MarketValue - b.companyDetails.MarketValue) * sortDirection
+			);
+		} else {
+			stockRows = stockRows.sort(
+				(a, b) => (a.stock[sortColumn] > b.stock[sortColumn] ? 1 : -1) * sortDirection
+			);
 		}
-		// console.log(sector);
-		// console.log(stockRows.length);
 	}
 
-	// Handle header click event
-	const handleHeaderClick = (column) => {
-		sortColumn = column;
-		if (sortDirection === 0) {
-			sortDirection = 1;
-		} else if (sortDirection === 1) {
-			sortDirection = -1;
-		} else {
-			sortColumn = null;
-			sortDirection = 0;
-		}
-	};
-
-	const pageSize = 50;
-	let position = pageSize;
-	// let page = 0;
 	const meta = 'מידע על כשרות ההשקעה במניות ישראליות, ריבית ושבת';
-	// let tableScroll;
 </script>
 
 <Meta title={meta} desc={meta} />

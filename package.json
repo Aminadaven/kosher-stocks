@@ -38,6 +38,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"alasql": "^4.1.3",
 		"chart.js": "^4.3.0"
 	}
 }

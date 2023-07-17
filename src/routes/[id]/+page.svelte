@@ -59,7 +59,7 @@
 			<!-- <div class="max-w-md"> -->
 			<h1 class="text-5xl font-bold">
 				{#if stockRow.companyDetails.Site}
-					<a href={stockRow.companyDetails.Site} class="link link-hover"
+					<a href="https://{stockRow.companyDetails.Site}" class="link link-hover"
 						>{stockRow.companyDetails.CompanyLongName}</a
 					>
 				{:else}
@@ -106,7 +106,7 @@
 <div class="flex flex-col md:flex-row justify-between content-center">
 	<div class="bg-info rounded-2xl h-fit w-fit">
 		<a
-			href={`https://maya.tase.co.il/company/${stockRow.stock.IssueNo}?view=reports`}
+			href="https://maya.tase.co.il/company/{stockRow.stock.IssueNo}?view=reports"
 			class="link link-hover"
 			>דוחות באתר מאיה
 			<img src={maya} class="rounded-b-2xl" alt="דוחות באתר מאיה" />
