@@ -116,12 +116,14 @@
 		class="w-min md:w-[35%] input input-bordered text-center bg-transparent"
 		placeholder="חיפוש"
 	/>
-	סקטור: 
-	<select bind:value={sector} class="select select-bordered mr-2 pl-10 pr-4 max-w-xs w-min 2xl:max-w-none 2xl:w-[35%]">
-		{#each sectors as sector}
-			<option value={sector}>{sector}</option>
-		{/each}
-	</select>
+	<div class="indicator">
+		<span class="indicator-item badge">סקטור</span>
+		<select bind:value={sector} class="select select-bordered mr-2 pl-10 pr-4">
+			{#each sectors as sector}
+				<option value={sector}>{sector}</option>
+			{/each}
+		</select>
+	</div>
 	<ToggleFilter
 		short="העסקה בשבת"
 		label="רק חברות שלא מעסיקות בשבת"
@@ -134,12 +136,15 @@
 	/>
 </span>
 <div class="max-h-[520px] overflow-auto">
-	<table class="table table-fixed table-xs sm:table-sm md:table-md lg:table-lg table-pin-rows text-center static">
+	<table
+		class="table table-fixed table-xs sm:table-sm md:table-md lg:table-lg table-pin-rows text-center static"
+	>
 		<thead>
 			<tr>
 				<th><button on:click={() => handleHeaderClick('NameHeb')}> שם חברה </button></th>
 				<th><button on:click={() => handleHeaderClick('SymbolEng')}> סמל </button></th>
 				<th><button on:click={() => handleHeaderClick('SectorHeb')}> סקטור </button></th>
+				<th><button on:click={() => handleHeaderClick('MarketValue')}> שווי שוק</button></th>
 				<th><button on:click={() => handleHeaderClick('permits')}> סך עובדים בשבת </button></th>
 				<th><button on:click={() => handleHeaderClick('approval')}> היתר עסקה </button></th>
 			</tr>
@@ -148,11 +153,12 @@
 			{#each stockRows?.slice(0, position) ?? [] as stockRow, index}
 				{#if index === position - pageSize / 2}
 					<tr use:viewport on:enterViewport={() => (position += pageSize)} />
-			{/if}
+				{/if}
 				<tr class="hover">
 					<td><a href="{base}/{stockRow.stock.CorporateNo}">{stockRow.stock.NameHeb}</a></td>
 					<td>{stockRow.stock.SymbolEng}</td>
 					<td>{stockRow.stock.SectorHeb}</td>
+					<td>{stockRow.companyDetails.MarketValue}</td>
 					<td>{getShabbatWorkersSum(stockRow)}</td>
 					<td>{getIskaApprovaltype(stockRow)}</td>
 				</tr>
