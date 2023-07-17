@@ -2,13 +2,14 @@
 	import dataJson from '$lib/data/data.json';
 	import iskaApproval from '$lib/assets/iska-approval.png';
 	import shabbatPermit from '$lib/assets/shabbat-permit.jpg';
-	import tase from '$lib/assets/tase.png';
 	import maya from '$lib/assets/maya.jpg';
 	import { page } from '$app/stores';
 	import Meta from '../../components/meta.svelte';
-	import Collapse from '../../components/collapse.svelte';
-	import LineChart from '../../components/line-chart.svelte';
-	import Chart from 'chart.js/auto';
+	import { Chart, ArcElement, DoughnutController, Legend, Title, Tooltip } from 'chart.js';
+	import { onMount } from 'svelte';
+	import Card from '../../components/card.svelte';
+
+	Chart.register(ArcElement, DoughnutController, Legend, Title, Tooltip);
 
 	const id = $page.params.id;
 	const stockRow = dataJson.data[dataJson.index[id]];
@@ -16,23 +17,35 @@
 
 	let canvas;
 
-	// 	const data = {
-	//   labels: [
-	//     'Red',
-	//     'Blue',
-	//     'Yellow'
-	//   ],
-	//   datasets: [{
-	//     label: 'My First Dataset',
-	//     data: [300, 50, 100],
-	//     backgroundColor: [
-	//       'rgb(255, 99, 132)',
-	//       'rgb(54, 162, 235)',
-	//       'rgb(255, 205, 86)'
-	//     ],
-	//     hoverOffset: 4
-	//   }]
-	// };
+	const chartData = {
+		labels: stockRow.shareHolders.map((shareHolder) => shareHolder.HolderName),
+		datasets: [
+			{
+				data: stockRow.shareHolders.map((shareHolder) => shareHolder.Percentage),
+				backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'],
+				hoverOffset: 10
+			}
+		]
+	};
+
+	onMount(async () => {
+		new Chart(canvas, {
+			type: 'doughnut',
+			data: chartData,
+			options: {
+				cutout: '80%',
+				responsive: true,
+				plugins: {
+					legend: {
+						display: true,
+						labels: {
+							color: '#FFF'
+						}
+					}
+				}
+			}
+		});
+	});
 </script>
 
 <Meta title={meta} desc={meta} />
@@ -44,7 +57,15 @@
 	<div class="hero-content text-center">
 		<div class="">
 			<!-- <div class="max-w-md"> -->
-			<h1 class="text-5xl font-bold">{stockRow.companyDetails.CompanyLongName}</h1>
+			<h1 class="text-5xl font-bold">
+				{#if stockRow.companyDetails.Site}
+					<a href={stockRow.companyDetails.Site} class="link link-hover"
+						>{stockRow.companyDetails.CompanyLongName}</a
+					>
+				{:else}
+					{stockRow.companyDetails.CompanyLongName}
+				{/if}
+			</h1>
 			<p class="py-3">
 				{stockRow.companyDetails.Description}
 				<br />
@@ -56,13 +77,11 @@
 						<strong>{stockRow.stock.SymbolHeb}</strong> |
 						<strong>{stockRow.stock.SymbolEng}</strong>
 					</div>
-					<!-- <div class="stat-desc">desc</div> -->
 				</div>
 
 				<div class="stat place-items-center">
 					<div class="stat-title">מספר חברה (ח.פ.)</div>
 					<div class="stat-value">{stockRow.stock.CorporateNo}</div>
-					<!-- <div class="stat-desc text-secondary">desc</div> -->
 				</div>
 
 				<div class="stat place-items-center">
@@ -73,41 +92,32 @@
 			{stockRow.stock.SectorHeb} <br /> -->
 						{stockRow.stock.SubSectorHeb}
 					</div>
-					<!-- <div class="stat-desc">↘︎ 90 (14%)</div> -->
 				</div>
 
 				<div class="stat place-items-center">
 					<div class="stat-title">שווי שוק</div>
 					<div class="stat-value">{stockRow.companyDetails.MarketValue}</div>
-					<!-- <div class="stat-desc">↘︎ 90 (14%)</div> -->
 				</div>
-
-				{#if stockRow.companyDetails.Site}
-					<div class="stat place-items-center">
-						<div class="stat-title">אתר</div>
-						<div class="stat-value">
-							<a href={stockRow.companyDetails.Site} class="link link-hover"
-								>{stockRow.companyDetails.Site}</a
-							>
-						</div>
-						<!-- <div class="stat-desc">↘︎ 90 (14%)</div> -->
-					</div>
-				{/if}
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="flex flex-row justify-between content-center">
-	<a
-		href={`https://maya.tase.co.il/company/${stockRow.stock.IssueNo}?view=reports`}
-		class="link link-hover bg-info rounded-2xl"
-		>דוחות באתר מאיה
-		<img src={maya} class="rounded-b-2xl" alt="דוחות באתר מאיה" />
-	</a>
+<div class="flex flex-col md:flex-row justify-between content-center">
+	<div class="bg-info rounded-2xl h-fit w-fit">
+		<a
+			href={`https://maya.tase.co.il/company/${stockRow.stock.IssueNo}?view=reports`}
+			class="link link-hover"
+			>דוחות באתר מאיה
+			<img src={maya} class="rounded-b-2xl" alt="דוחות באתר מאיה" />
+		</a>
+	</div>
+	<br />
 	{#if stockRow.approvals}
-		<div class="card card-side card-compact w-fit glass">
-			<figure><img src={iskaApproval} alt="היתר עסקה" /></figure>
+		<Card>
+			<figure class="md:w-fit h-fit md:max-w-[220px]">
+				<img src={iskaApproval} alt="היתר עסקה" />
+			</figure>
 			<div class="card-body">
 				{#each stockRow.approvals as approval}
 					<h2 class="card-title">היתר עסקה {approval.type}</h2>
@@ -119,13 +129,13 @@
 					{/if}
 				{/each}
 			</div>
-		</div>
+		</Card>
 		<br />
 	{/if}
 
 	{#if stockRow.permits}
-		<div class="card card-side card-compact w-fit glass">
-			<figure class="w-fit h-full max-w-[220px]">
+		<Card>
+			<figure class="md:w-fit h-fit md:max-w-[220px]">
 				<img src={shabbatPermit} alt="היתרי העסקה בשבת" />
 			</figure>
 			<div class="card-body">
@@ -141,41 +151,21 @@
 					</p>
 				{/each}
 			</div>
+		</Card>
+		<br />
+	{/if}
+
+	{#if stockRow.shareHolders}
+		<div class="w-fit mx-auto md:mx-0">
+			<h2 class="bg-success rounded-t-xl font-bold text-xl">מחזיקי מניה</h2>
+			<canvas bind:this={canvas} />
 		</div>
 		<br />
 	{/if}
 </div>
 <br />
 
-<!-- <div class="mx-auto">
-	{#if stockRow.shareHolders}
-		<Collapse header="מחזיקי מניה">
-			<p>
-				{JSON.stringify(stockRow.shareHolders, null, 4)}
-			</p></Collapse
-		>
-		<br />
-	{/if}
-</div> -->
-
-{#if stockRow.shareHolders}
-	<h2 class=" bg-success rounded-t-xl font-bold text-xl">מחזיקי מניה</h2>
-	<!-- <br /> -->
-	<div class="flex flex-row text-center justify-around">
-		<!-- <canvas bind:this={canvas} /> -->
-		<!-- <LineChart data={stockRow.shareHolders} /> -->
-		{#each stockRow.shareHolders as shareHolder}
-			<span class="mx-1">
-				{shareHolder.HolderName} : {shareHolder.Percentage}%
-			</span>
-			<!-- <div class="border-8 border-black" style:width={shareHolder.Percentage +"%"}></div>{shareHolder.HolderName} -->
-		{/each}
-	</div>
-	<br />
-{/if}
-
 {#if stockRow.financeData}
-	<!-- <Collapse header="מידע פיננסי"> -->
 	<div class="overflow-y-auto">
 		<h2 class=" bg-success rounded-t-xl font-bold text-xl">
 			מידע פיננסי ב{stockRow.financeData.CurrencyName}
@@ -212,6 +202,5 @@
 			</tbody>
 		</table>
 	</div>
-	<!-- </Collapse> -->
 	<br />
 {/if}
