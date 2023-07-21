@@ -231,9 +231,8 @@ const saveFinanceData = async () => {
         ];
         const financeData = onlyColumns(respData, relevantKeys);
         const extractNum = (rowName, key, rowName2) => {
-            // const findRow = financeData.AllRows.find;
-            const rowData = financeData.AllRows.find(row => row.Name.trim() === rowName) ?? 
-            financeData.AllRows.find(row => row.Name.trim() === rowName2);
+            const rowData = financeData.AllRows.find(row => row.Name.trim() === rowName) ??
+                financeData.AllRows.find(row => row.Name.trim() === rowName2);
             return rowData ? Number(rowData?.[key].replace(" %", "").replace(",", "")) : "---";
         };
         const calcPercent = (a, b) => (100 * a / b).toFixed(2) + " %";
@@ -243,21 +242,23 @@ const saveFinanceData = async () => {
             {
                 "SectionId": 5, "Code": "1", "Name": "שיעור הרווח הנקי",
                 "CurrPeriodValue":
-                    calcPercent(extractNum("רווח נקי", "CurrPeriodValue"), extractNum('סה"כ הכנסות', "CurrPeriodValue")),
+                    calcPercent(extractNum("רווח נקי", "CurrPeriodValue", 'רווח נקי מיוחס לבעלי המניות'), extractNum('סה"כ הכנסות', "CurrPeriodValue")),
                 "PrevPeriodValue":
-                    calcPercent(extractNum("רווח נקי", "PrevPeriodValue"), extractNum('סה"כ הכנסות', "PrevPeriodValue")),
+                    calcPercent(extractNum("רווח נקי", "PrevPeriodValue", 'רווח נקי מיוחס לבעלי המניות'), extractNum('סה"כ הכנסות', "PrevPeriodValue")),
                 "PrevYearValue":
-                    calcPercent(extractNum("רווח נקי", "PrevYearValue"), extractNum('סה"כ הכנסות', "PrevYearValue"))
+                    calcPercent(extractNum("רווח נקי", "PrevYearValue", 'רווח נקי מיוחס לבעלי המניות'), extractNum('סה"כ הכנסות', "PrevYearValue"))
             },
             {
                 "SectionId": 5, "Code": "2", "Name": "שיעור הצמיחה",
-                "CurrPeriodValue": formaPercent((extractNum('סה"כ הון', "CurrPeriodValue") / extractNum('סה"כ הון', "PrevPeriodValue")) - 1)
+                "CurrPeriodValue": formaPercent((extractNum('סה"כ הון', "CurrPeriodValue", 'הון עצמי מיוחס לבעלי המניות') /
+                    extractNum('סה"כ הון', "PrevPeriodValue", 'הון עצמי מיוחס לבעלי המניות')) - 1)
                 , "PrevPeriodValue": "---", "PrevYearValue": "---"
             },
 
             {
                 "SectionId": 5, "Code": "3", "Name": "תשואת דיבידנד",
-                "CurrPeriodValue": formaPercent(-extractNum('דיבידנד', "PrevYearValue") / extractNum('סה"כ הון', "PrevYearValue") /
+                "CurrPeriodValue": formaPercent(extractNum('דיבידנד', "PrevYearValue") - extractNum('דיבידנד', "PrevPeriodValue") + extractNum('דיבידנד', "CurrPeriodValue") /
+                    -extractNum('סה"כ הון', "CurrPeriodValue", 'הון עצמי מיוחס לבעלי המניות') /
                     extractNum('שוק להון', "CurrPeriodValue")), "PrevPeriodValue": "---", "PrevYearValue": "---"
             },
 
@@ -274,7 +275,7 @@ const saveFinanceData = async () => {
                 "PrevPeriodValue": "---", "PrevYearValue": "---"
             },
 
-            // { "SectionId": 5, "Code": "6", "Name": "מספר הקסם", "CurrPeriodValue": "32.1 %", "PrevPeriodValue": "---", "PrevYearValue": "34.8 %" },
+            // { "SectionId": 5, "Code": "6", "Name": "מספר הקסם", "CurrPeriodValue": "", "PrevPeriodValue": "---", "PrevYearValue": "---", },
         ];
         financeData.AllRows.push(...additionalRows);
         generalData[index]['financeData'] = financeData;
