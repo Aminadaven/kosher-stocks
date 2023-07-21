@@ -23,7 +23,7 @@ const config = {
         },
         prerender: {
             handleHttpError: 'warn',
-			entries: [...Object.keys(data.index).map(key => `/${key}`), '/', '/about']
+			entries: [...Object.keys(data.index).map(key => `/${key}`), '/', '/about', '/advanced']
 		}
 	}
 };

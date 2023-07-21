@@ -178,22 +178,27 @@
 					<th>שם</th>
 					<th
 						>{stockRow.financeData.CurrentPeriod.Title}
-						{stockRow.financeData.CurrentPeriod.IFRS}</th
+						{stockRow.financeData.CurrentPeriod.IFRS ? ' IFRS' : ''}</th
 					>
 					<th
 						>{stockRow.financeData.PreviousPeriod.Title}
-						{stockRow.financeData.PreviousPeriod.IFRS}</th
+						{stockRow.financeData.PreviousPeriod.IFRS ? ' IFRS' : ''}</th
 					>
 					<th
 						>{stockRow.financeData.PreviousYear.Title}
-						{stockRow.financeData.PreviousYear.IFRS}</th
+						{stockRow.financeData.PreviousYear.IFRS ? ' IFRS' : ''}</th
 					>
 				</tr>
 			</thead>
 			<tbody class="bg-info">
 				{#each stockRow.financeData.AllRows ?? [] as row, index}
+					{console.log(JSON.stringify(row)) || ''}
 					<tr class="hover">
-						<td>{row.Name}</td>
+						{#if row.Code === '0'}
+							<td class="font-semibold">{row.Name}</td>
+						{:else}
+							<td>{row.Name}</td>
+						{/if}
 						<td>{row.CurrPeriodValue}</td>
 						<td>{row.PrevPeriodValue}</td>
 						<td>{row.PrevYearValue}</td>

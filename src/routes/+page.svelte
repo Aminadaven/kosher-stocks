@@ -44,11 +44,13 @@
 	};
 
 	$: {
-		// if (text.startsWith('SQL: ')) {
-		// 	// console.log(alasql('select * from ?', [data.data]));
-		// 	stockRows = alasql(`select * from ? where ${text.substring(5)}`, [data.data]);
-		// 	break $;
-		// }
+		if (text.startsWith('SQL: ')) {
+			// console.log(alasql('select * from ?', [data.data]));
+			try {
+				stockRows = alasql(`select * from ? where ${text.substring(5)}`, [data.data]);
+				break $;
+			} catch (error) {}
+		}
 		const keysToCheck = [
 			'NameHeb',
 			'NameEng',
@@ -59,7 +61,7 @@
 		];
 		const lowerCaseText = text?.toLowerCase() ?? '';
 		const searchFilter = (stockRow) =>
-			keysToCheck.some((key) => stockRow.stock[key]?.toLowerCase().includes(lowerCaseText));
+			keysToCheck.some((key) => stockRow.stock[key]?.toLowerCase().trim().includes(lowerCaseText));
 		const permitFilter = (stockRow) => {
 			if (!permitDisallowed) return true;
 			const workers = getShabbatWorkersSum(stockRow);

@@ -3,7 +3,7 @@
 	import { base } from '$app/paths';
 	// import { onMount } from 'svelte';
 
-	const routes = { 'עמוד ראשי': '/', אודות: '/about' };
+	const routes = { 'עמוד ראשי': '/', 'אודות': '/about', 'חיפוש מתקדם': '/advanced', };
 
 	// let indicesData = [];
 	// const fetchData = async () => {
