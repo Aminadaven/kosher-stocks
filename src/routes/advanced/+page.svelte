@@ -14,6 +14,10 @@
 			stockRows = alasql(query, [data?.data]);
 		} catch (error) {}
 	}
+
+	// const allKeys = () => {
+
+	// };
 </script>
 
 <Meta title={meta} desc={meta} />
