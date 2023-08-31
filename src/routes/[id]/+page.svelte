@@ -8,7 +8,7 @@
 	import { Chart, ArcElement, DoughnutController, Legend, Title, Tooltip } from 'chart.js';
 	import { onMount } from 'svelte';
 	import Card from '../../components/card.svelte';
-	import TradingViewWidget from '../../components/TradingViewWidget.svelte';
+	import SymbolOverview from '../../components/trading-view/symbol-overview.svelte';
 
 	Chart.register(ArcElement, DoughnutController, Legend, Title, Tooltip);
 
@@ -104,10 +104,10 @@
 	</div>
 </div>
 
-<TradingViewWidget
+<SymbolOverview
 	divClass="my-5"
-	width={'100%'}
-	height={'400'}
+	width="100%"
+	height="400"
 	symbols={[[stockRow.companyDetails.CompanyLongName, `TASE:${stockRow.stock.SymbolEng}|12M`]]}
 />
 
