@@ -8,6 +8,7 @@
 	import { Chart, ArcElement, DoughnutController, Legend, Title, Tooltip } from 'chart.js';
 	import { onMount } from 'svelte';
 	import Card from '../../components/card.svelte';
+	import TradingViewWidget from '../../components/TradingViewWidget.svelte';
 
 	Chart.register(ArcElement, DoughnutController, Legend, Title, Tooltip);
 
@@ -103,6 +104,13 @@
 	</div>
 </div>
 
+<TradingViewWidget
+	divClass="my-5"
+	width={'100%'}
+	height={'400'}
+	symbols={[[stockRow.companyDetails.CompanyLongName, `TASE:${stockRow.stock.SymbolEng}|12M`]]}
+/>
+
 <div class="flex flex-col md:flex-row justify-between content-center">
 	<div class="bg-info rounded-2xl h-fit w-fit">
 		<a
@@ -167,7 +175,7 @@
 
 {#if stockRow.financeData}
 	<div class="overflow-y-auto">
-		<h2 class=" bg-success rounded-t-xl font-bold text-xl">
+		<h2 class="bg-success rounded-t-xl font-bold text-xl">
 			מידע פיננסי ב{stockRow.financeData.CurrencyName}
 		</h2>
 		<table
@@ -192,7 +200,7 @@
 			</thead>
 			<tbody class="bg-info">
 				{#each stockRow.financeData.AllRows ?? [] as row, index}
-					{console.log(JSON.stringify(row)) || ''}
+					<!-- {console.log(JSON.stringify(row)) || ''} -->
 					<tr class="hover">
 						{#if row.Code === '0'}
 							<td class="font-semibold">{row.Name}</td>
