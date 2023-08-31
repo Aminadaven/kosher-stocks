@@ -73,7 +73,7 @@
 			// return ['פרטי', 'כללי'].includes(appprovaltype);
 			return appprovaltype !== 'לא נמצא היתר עסקה לחברה';
 		};
-		const sectorFilter = (stockRow) => sector === 'הכל' || stockRow.stock.SectorHeb === sector;
+		const sectorFilter = (stockRow) => !sector || sector === 'הכל' || stockRow.stock.SectorHeb === sector;
 		const allFilters = (stockRow) =>
 			searchFilter(stockRow) &&
 			permitFilter(stockRow) &&
@@ -125,9 +125,8 @@
 		class="w-min md:w-[35%] input input-bordered text-center bg-transparent"
 		placeholder="חיפוש"
 	/>
-	<div class="indicator">
-		<span class="indicator-item badge">סקטור</span>
-		<select bind:value={sector} class="select select-bordered mr-2 pl-10 pr-4">
+	<select bind:value={sector} id="sectorSelect" class="select select-bordered mr-2 pl-10 pr-4">
+		<option disabled selected value="">סקטור</option>
 			{#each sectors as sector}
 				<option value={sector}>{sector}</option>
 			{/each}
