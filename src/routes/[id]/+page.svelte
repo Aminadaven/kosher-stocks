@@ -50,13 +50,9 @@
 
 <Meta title={meta} desc={meta} />
 
-<!-- <h1 class="my-5 p-2 text-4xl inline-block">{stockRow.companyDetails.CompanyLongName}</h1> -->
-
 <div class="hero bg-base-200 rounded-3xl my-5">
-	<!-- <div class="hero min-h-screen bg-base-200"> -->
 	<div class="hero-content text-center">
 		<div class="">
-			<!-- <div class="max-w-md"> -->
 			<h1 class="text-5xl font-bold">
 				{#if stockRow.companyDetails.Site}
 					<a href="https://{stockRow.companyDetails.Site}" class="link link-hover"
@@ -87,9 +83,6 @@
 				<div class="stat place-items-center">
 					<div class="stat-title">סקטור</div>
 					<div class="stat-value">
-						<!-- {stockRow.stock.SuperSectorHeb}
-			<br />
-			{stockRow.stock.SectorHeb} <br /> -->
 						{stockRow.stock.SubSectorHeb}
 					</div>
 				</div>
