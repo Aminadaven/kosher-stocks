@@ -73,7 +73,8 @@
 			// return ['פרטי', 'כללי'].includes(appprovaltype);
 			return appprovaltype !== 'לא נמצא היתר עסקה לחברה';
 		};
-		const sectorFilter = (stockRow) => !sector || sector === 'הכל' || stockRow.stock.SectorHeb === sector;
+		const sectorFilter = (stockRow) =>
+			!sector || sector === 'הכל' || stockRow.stock.SectorHeb === sector;
 		const allFilters = (stockRow) =>
 			searchFilter(stockRow) &&
 			permitFilter(stockRow) &&
@@ -122,16 +123,19 @@
 	<input
 		type="text"
 		bind:value={text}
-		class="w-min md:w-[35%] input input-bordered text-center bg-transparent"
+		class="input input-bordered text-center bg-transparent w-1/2 md:w-1/3"
 		placeholder="חיפוש"
 	/>
-	<select bind:value={sector} id="sectorSelect" class="select select-bordered mr-2 pl-10 pr-4">
+	<select
+		bind:value={sector}
+		id="sectorSelect"
+		class="select select-bordered w-5/12 lg:w-1/3 xl:w-1/5 ml-2 mr-2"
+	>
 		<option disabled selected value="">סקטור</option>
-			{#each sectors as sector}
-				<option value={sector}>{sector}</option>
-			{/each}
-		</select>
-	</div>
+		{#each sectors as sector}
+			<option value={sector}>{sector}</option>
+		{/each}
+	</select>
 	<ToggleFilter
 		short="העסקה בשבת"
 		label="רק חברות שלא מעסיקות בשבת"
