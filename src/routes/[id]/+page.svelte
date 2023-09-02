@@ -8,9 +8,9 @@
 	import Meta from '../../components/meta.svelte';
 	import Card from '../../components/card.svelte';
 	import SymbolOverview from '../../components/trading-view/symbol-overview.svelte';
-	import SymbolInfo from '../../components/trading-view/symbol-info.svelte';
+	// import SymbolInfo from '../../components/trading-view/symbol-info.svelte';
 	import FundamentalData from '../../components/trading-view/fundamental-data.svelte';
-	import MiniChart from '../../components/trading-view/mini-chart.svelte';
+	// import MiniChart from '../../components/trading-view/mini-chart.svelte';
 
 	const id = $page.params.id;
 	const stockRow = data.data[data.index[id]];

@@ -4,6 +4,7 @@
 	import viewport from '../actions/useViewportAction';
 	import Meta from '../components/meta.svelte';
 	import ToggleFilter from '../components/toggle-filter.svelte';
+	// import SingleTicker from '../components/trading-view/single-ticker.svelte';
 	import alasql from 'alasql';
 
 	let text = '';
@@ -119,6 +120,7 @@
 <Meta title={meta} desc={meta} />
 
 <h1 class="pb-7 pt-2 text-4xl font-bold text-neutral-content">פילטר מניות כשרות</h1>
+
 <span class="flex flex-row justify-between flex-wrap md:flex-nowrap">
 	<input
 		type="text"
@@ -126,6 +128,7 @@
 		class="input input-bordered text-center bg-transparent w-1/2 md:w-1/3"
 		placeholder="חיפוש"
 	/>
+
 	<select
 		bind:value={sector}
 		id="sectorSelect"
@@ -136,20 +139,23 @@
 			<option value={sector}>{sector}</option>
 		{/each}
 	</select>
+
 	<ToggleFilter
 		short="העסקה בשבת"
 		label="רק חברות שלא מעסיקות בשבת"
 		on:change={() => (permitDisallowed = !permitDisallowed)}
 	/>
+
 	<ToggleFilter
 		short="היתר עסקה"
 		label="רק חברות עם היתר עסקה"
 		on:change={() => (approvalRequired = !approvalRequired)}
 	/>
 </span>
+
 <div class="max-h-[520px] overflow-auto">
 	<table
-		class="table table-fixed table-xs sm:table-sm md:table-md lg:table-lg table-pin-rows text-center static"
+		class="table table-zebra table-fixed table-xs sm:table-sm md:table-md lg:table-lg table-pin-rows text-center static"
 	>
 		<thead>
 			<tr>
@@ -166,7 +172,7 @@
 				{#if index === position - pageSize / 2}
 					<tr use:viewport on:enterViewport={() => (position += pageSize)} />
 				{/if}
-				<tr class="hover">
+				<tr class="hover border-hidden">
 					<td><a href="{base}/{stockRow.stock.CorporateNo}">{stockRow.stock.NameHeb}</a></td>
 					<td>{stockRow.stock.SymbolEng}</td>
 					<td>{stockRow.stock.SectorHeb}</td>
