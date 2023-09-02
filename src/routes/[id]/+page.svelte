@@ -1,52 +1,20 @@
 <script>
-	import dataJson from '$lib/data/data.json';
+	import CircleChart from '../../components/circle-chart.svelte';
+	import data from '$lib/data/data.json';
 	import iskaApproval from '$lib/assets/iska-approval.png';
 	import shabbatPermit from '$lib/assets/shabbat-permit.jpg';
 	import maya from '$lib/assets/maya.jpg';
 	import { page } from '$app/stores';
 	import Meta from '../../components/meta.svelte';
-	import { Chart, ArcElement, DoughnutController, Legend, Title, Tooltip } from 'chart.js';
-	import { onMount } from 'svelte';
 	import Card from '../../components/card.svelte';
 	import SymbolOverview from '../../components/trading-view/symbol-overview.svelte';
-
-	Chart.register(ArcElement, DoughnutController, Legend, Title, Tooltip);
+	import SymbolInfo from '../../components/trading-view/symbol-info.svelte';
+	import FundamentalData from '../../components/trading-view/fundamental-data.svelte';
+	import MiniChart from '../../components/trading-view/mini-chart.svelte';
 
 	const id = $page.params.id;
-	const stockRow = dataJson.data[dataJson.index[id]];
+	const stockRow = data.data[data.index[id]];
 	const meta = `מידע על כשרות ההשקעה במניות ישראליות, ריבית ושבת | דף חברה ${stockRow.stock.NameHeb}`;
-
-	let canvas;
-
-	const chartData = {
-		labels: stockRow.shareHolders.map((shareHolder) => shareHolder.HolderName),
-		datasets: [
-			{
-				data: stockRow.shareHolders.map((shareHolder) => shareHolder.Percentage),
-				backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'],
-				hoverOffset: 10
-			}
-		]
-	};
-
-	onMount(async () => {
-		new Chart(canvas, {
-			type: 'doughnut',
-			data: chartData,
-			options: {
-				cutout: '80%',
-				responsive: true,
-				plugins: {
-					legend: {
-						display: true,
-						labels: {
-							color: '#FFF'
-						}
-					}
-				}
-			}
-		});
-	});
 </script>
 
 <Meta title={meta} desc={meta} />
@@ -81,6 +49,13 @@
 					<div class="stat-value">{stockRow.stock.CorporateNo}</div>
 				</div>
 
+				<!-- <div class="stat place-items-center">
+					<div class="stat-title">גרף שנה</div>
+					<div class="stat-value mt-2">
+						<MiniChart width="100%" height="50" symbol="TASE:{stockRow.stock.SymbolEng}" />
+					</div>
+				</div> -->
+
 				<div class="stat place-items-center">
 					<div class="stat-title">סקטור</div>
 					<div class="stat-value">
@@ -90,12 +65,14 @@
 
 				<div class="stat place-items-center">
 					<div class="stat-title">שווי שוק</div>
-					<div class="stat-value">{stockRow.companyDetails.MarketValue}</div>
+					<div class="stat-value">{stockRow.companyDetails.MarketValue.toLocaleString()}</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<!-- <SymbolInfo divClass="my-5" width="100%" symbol="TASE:{stockRow.stock.SymbolEng}" /> -->
 
 <SymbolOverview
 	divClass="my-5"
@@ -159,11 +136,14 @@
 	{#if stockRow.shareHolders}
 		<div class="w-fit mx-auto md:mx-0">
 			<h2 class="bg-success rounded-t-xl font-bold text-xl">מחזיקי מניה</h2>
-			<canvas bind:this={canvas} />
+			<CircleChart shareHolders={stockRow.shareHolders} />
 		</div>
 		<br />
 	{/if}
 </div>
+<br />
+
+<FundamentalData symbol="TASE:{stockRow.stock.SymbolEng}" height="800" />
 <br />
 
 {#if stockRow.financeData}

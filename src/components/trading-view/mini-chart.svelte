@@ -11,11 +11,11 @@
 		locale: 'he_IL',
 		dateRange: '12M',
 		colorTheme: 'light',
-		isTransparent: false,
+		isTransparent: true,
 		autosize: false,
 		// "largeChartUrl": "http://www.google.com",
 		noTimeScale: false,
-		chartOnly: false
+		chartOnly: true
 	};
 </script>
 

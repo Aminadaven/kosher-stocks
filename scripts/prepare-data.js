@@ -131,7 +131,7 @@ const saveApprovals = async () => {
     const saveApprovalTable = async (url, selectorId, type) => {
         const response = await fetch(`https://www.iska.co.il/${url}`);
         if (!response.ok) {
-            console.log(`error fetching approvals ${type} data!`);
+            console.log(`error fetching iska.co.il for approvals ${type} data!`);
             return;
         }
         const html = parse(await response.text());
@@ -139,7 +139,7 @@ const saveApprovals = async () => {
 
         const dataResponse = await fetch(link);
         if (!dataResponse.ok) {
-            console.log(`error fetching approvals ${type} data!`);
+            console.log(`error fetching excel file for approvals ${type} data!`);
             return;
         }
 
@@ -174,6 +174,34 @@ const saveApprovals = async () => {
     await saveApprovalTable(
         "%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%97%d7%91%d7%a8%d7%95%d7%aa-%d7%a2%d7%9d-%d7%94%d7%99%d7%aa%d7%a8-%d7%a2%d7%99%d7%a1%d7%a7%d7%90-%d7%a4%d7%a8%d7%98%d7%99/",
         'post-2211', 'פרטי');
+};
+
+const saveLogos = async () => {
+    const propertyName = 'logoUrl';
+
+    for (const [stock, index] of generalData.map((obj, index) => [obj.stock, index])) {
+        const companyName = stock.CompanyNameHeb;
+        const searchQuery = `Company Logo ${companyName}`;
+
+        const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}&tbm=isch`;
+        const response = await fetch(googleSearchUrl);
+        if (!response.ok) {
+            console.log(`error fetching logo of ${companyName}`);
+            return;
+        }
+        const html = parse(await response.text());
+        const imageElement = html.querySelectorAll('img')
+            .find(img => img.getAttribute('src').startsWith("https"));
+
+        if (!imageElement) {
+            console.error('No logo found.');
+            return;
+        }
+        const logoUrl = imageElement.getAttribute('src') ?? 'url not found.';
+        // console.log(`Company: ${companyName}, Logo URL: ${logoUrl}`);
+        generalData[index][propertyName] = logoUrl;
+        // addElement(propertyName, generalIndex[index], logoUrl);
+    }
 };
 
 const saveCompanyDetails = async () => {
@@ -259,7 +287,7 @@ const saveFinanceData = async () => {
                 "SectionId": 5, "Code": "3", "Name": "תשואת דיבידנד",
                 "CurrPeriodValue": formaPercent(
                     (extractNum('דיבידנד', "PrevYearValue") - extractNum('דיבידנד', "PrevPeriodValue") + extractNum('דיבידנד', "CurrPeriodValue"))
-                     /
+                    /
                     -extractNum('סה"כ הון', "CurrPeriodValue", 'הון עצמי מיוחס לבעלי המניות') /
                     extractNum('שוק להון', "CurrPeriodValue")), "PrevPeriodValue": "---", "PrevYearValue": "---"
             },
@@ -360,13 +388,15 @@ const saveTradeData = async () => {
 const funcs = [
     savePermits,
     saveApprovals,
+    saveLogos,
     saveCompanyDetails,
     saveFinanceData,
+
     // saveReports,
     // saveTradeData,
 ];
 saveStocks()
     .then(() => Promise.all(funcs.map(func => func())))
     .then(() =>
-        fs.writeFileSync('./src/lib/data/data.json',
+        fs.writeFileSync('../src/lib/data/data.json',
             JSON.stringify({ index: generalIndex, data: generalData })));

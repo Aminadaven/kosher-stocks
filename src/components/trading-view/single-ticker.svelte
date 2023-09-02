@@ -2,14 +2,15 @@
 	import Widget from './widget.svelte';
 	export let width = '100%';
 	export let symbol = '';
+	export let url = '/';
 	export let divClass = '';
 	const widgetSettings = {
 		symbol,
 		width,
 		colorTheme: 'light',
-		isTransparent: false,
-		locale: 'he_IL'
-		//   "largeChartUrl": "http://www.google.com"
+		isTransparent: true,
+		locale: 'he_IL',
+		largeChartUrl: url
 	};
 </script>
 
