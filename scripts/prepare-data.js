@@ -398,5 +398,5 @@ const funcs = [
 saveStocks()
     .then(() => Promise.all(funcs.map(func => func())))
     .then(() =>
-        fs.writeFileSync('../src/lib/data/data.json',
+        fs.writeFileSync('./src/lib/data/data.json',
             JSON.stringify({ index: generalIndex, data: generalData })));

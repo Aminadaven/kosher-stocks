@@ -3,7 +3,7 @@
 @tailwind utilities;
 @font-face {
   font-family: "lulav";
-  src: url("../LulavCLM-Bold.otf");
+  src: url("$fonts/LulavCLM-Bold.otf");
 }
 
 
